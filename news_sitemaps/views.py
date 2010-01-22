@@ -5,7 +5,7 @@ from django.core import urlresolvers
 from django.utils.encoding import smart_str
 from django.core.paginator import EmptyPage, PageNotAnInteger
 
-from settings import LANG, NAME
+from settings import LANG, NAME, TZ
 
 def news_sitemap(request, sitemaps, section=None):
     maps, urls = [], []
@@ -30,5 +30,6 @@ def news_sitemap(request, sitemaps, section=None):
         'urlset': urls,
         'publication_name': NAME,
         'publication_lang': LANG,
+        'publication_tz': TZ,
     }))
     return HttpResponse(xml, mimetype='application/xml')

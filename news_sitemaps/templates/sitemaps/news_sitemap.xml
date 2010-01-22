@@ -11,11 +11,12 @@
 						<n:name>{{ publication_name }}</n:name>
 						<n:language>{{ publication_lang }}</n:language>
 					</n:publication>
+					<n:title>{{ url.title }}</n:title>
+		    			<n:publication_date>{{ url.lastmod.isoformat }}{{ publication_tz }}</n:publication_date>
 					{% if url.access %}<n:access>{{ url.access|lower }}</n:access> {% endif %}
-					<n:genres>pressrelease, blog</n:genres>
-					<n:title>Companies A, B in Merger Talks</n:title>
-		    			<n:publication_date>{{ url.lastmod.isoformat }}-05:00</n:publication_date>
+					{% if url.genres %}<n:genres>{{ url.genres }}</n:genres>{% endif %}
 		    			{% if url.keywords %}<n:keywords>{{ url.keywords|escape }}</n:keywords>{% endif %}
+		    			{% if url.stock_tickers %}<n:stock_tickers>{{ url.stock_tickers }}</n:stock_tickers>{% endif %}
 		    		</n:news>
 		   		</url>
 			{% endif %}

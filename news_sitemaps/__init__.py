@@ -54,7 +54,19 @@ class NewsSitemap(Sitemap):
             * Registration (visible): an article which prompts users to sign up for an unpaid account to view content.
         """
         return None
+    
+    def stock_tickers(self, obj):
+        """
+        Returns a comma-separated list of up to 5 stock tickers of the companies,
+        mutual funds, or other financial entities that are the main subject of the article.
+        Relevant primarily for business articles.
+        Each ticker must be prefixed by the name of its stock exchange,
+        and must match its entry in Google Finance.
+        For example, "NASDAQ:AMAT" (but not "NASD:AMAT"), or "BOM:500325" (but not "BOM:RIL").
+        """
+        return None
         
+    
     def get_urls(self, page=1):
         from django.contrib.sites.models import Site
         current_site = Site.objects.get_current()
@@ -68,10 +80,11 @@ class NewsSitemap(Sitemap):
                 'priority':   self._Sitemap__get('priority', item, None),
                 
                 # News attrs
-                'access':     self._Sitemap__get('access', item, None),
-                'keywords':   self._Sitemap__get('keywords', item, None),
-                'genres':     self._Sitemap__get('genres', item, None),
-                'title':      self._Sitemap__get('title', item, None),
+                'title':        self._Sitemap__get('title', item, None),
+                'access':       self._Sitemap__get('access', item, None),
+                'keywords':     self._Sitemap__get('keywords', item, None),
+                'genres':       self._Sitemap__get('genres', item, None),
+                'stock_tickers':self._Sitemap__get('stock_tickers', item, None),
             }
             urls.append(url_info)
         return urls
