@@ -70,10 +70,9 @@ class NewsSitemap(Sitemap):
     def get_urls(self, page=1):
         from django.contrib.sites.models import Site
         current_site = Site.objects.get_current()
-        urls = []
         for item in self.paginator.page(page).object_list:
             loc = "http://%s%s" % (current_site.domain, self._Sitemap__get('location', item))
-            url_info = {
+            yield {
                 'location':   loc,
                 'lastmod':    self._Sitemap__get('lastmod', item, None),
                 'changefreq': self._Sitemap__get('changefreq', item, None),
@@ -86,5 +85,3 @@ class NewsSitemap(Sitemap):
                 'genres':       self._Sitemap__get('genres', item, None),
                 'stock_tickers':self._Sitemap__get('stock_tickers', item, None),
             }
-            urls.append(url_info)
-        return urls
