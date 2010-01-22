@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:n="http://www.google.com/schemas/sitemap-news/0.9">
+	{% spaceless %}
+		{% for url in urlset %}
+			{% if url.lastmod %}
+		  		<url>
+		    		<loc>{{ url.location|escape }}</loc>
+		    		<n:news>
+					<n:publication>
+						<n:name>{{ publication_name }}</n:name>
+						<n:language>{{ publication_lang }}</n:language>
+					</n:publication>
+					{% if url.access %}<n:access>{{ url.access|lower }}</n:access> {% endif %}
+					<n:genres>pressrelease, blog</n:genres>
+					<n:title>Companies A, B in Merger Talks</n:title>
+		    			<n:publication_date>{{ url.lastmod.isoformat }}-05:00</n:publication_date>
+		    			{% if url.keywords %}<n:keywords>{{ url.keywords|escape }}</n:keywords>{% endif %}
+		    		</n:news>
+		   		</url>
+			{% endif %}
+		{% endfor %}
+	{% endspaceless %}
+</urlset>
