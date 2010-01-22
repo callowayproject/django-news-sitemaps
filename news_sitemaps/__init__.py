@@ -1,6 +1,6 @@
-from django.contrib.sitemaps import GenericSitemap
+from django.contrib.sitemaps import Sitemap
 
-class NewsSitemap(GenericSitemap):
+class NewsSitemap(Sitemap):
     def genres(self, obj):
         """
         Returns a comma-separated list of properties characterizing the content of the article,
@@ -60,16 +60,18 @@ class NewsSitemap(GenericSitemap):
         current_site = Site.objects.get_current()
         urls = []
         for item in self.paginator.page(page).object_list:
-            loc = "http://%s%s" % (current_site.domain, self.__get('location', item))
+            loc = "http://%s%s" % (current_site.domain, self._Sitemap__get('location', item))
             url_info = {
                 'location':   loc,
-                'lastmod':    self.__get('lastmod', item, None),
-                'changefreq': self.__get('changefreq', item, None),
-                'priority':   self.__get('priority', item, None),
-                'access':     self.__get('access', item, None),
-                'keywords':   self.__get('keywords', item, None),
-                'genres':     self.__get('genres', item, None),
-                'title':      self.__get('title', item, None),
+                'lastmod':    self._Sitemap__get('lastmod', item, None),
+                'changefreq': self._Sitemap__get('changefreq', item, None),
+                'priority':   self._Sitemap__get('priority', item, None),
+                
+                # News attrs
+                'access':     self._Sitemap__get('access', item, None),
+                'keywords':   self._Sitemap__get('keywords', item, None),
+                'genres':     self._Sitemap__get('genres', item, None),
+                'title':      self._Sitemap__get('title', item, None),
             }
             urls.append(url_info)
         return urls
