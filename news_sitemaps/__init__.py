@@ -9,7 +9,7 @@ class NewsSitemap(Sitemap):
         
         Options are::
         
-            * PressRelease (visible): an official press release.
+            * PressRelease (default, visible): an official press release.
             * Satire (visible): an article which ridicules its subject for didactic purposes.
             * Blog (visible): any article published on a blog, or in a blog format.
             * OpEd: an opinion-based article which comes specifically from the Op-Ed section of your site.
@@ -29,7 +29,6 @@ class NewsSitemap(Sitemap):
             return obj.name
         elif hasattr(obj, 'headline'):
             return obj.headline
-        return ''
     
     def keywords(self, obj):
         """
@@ -40,7 +39,6 @@ class NewsSitemap(Sitemap):
             return obj.keywords
         elif hasattr(obj, 'tags'):
             return obj.tags
-        return ''
     
     def access(self, obj):
         """
@@ -53,7 +51,6 @@ class NewsSitemap(Sitemap):
             * Subscription (visible): an article which prompts users to pay to view content.
             * Registration (visible): an article which prompts users to sign up for an unpaid account to view content.
         """
-        return None
     
     def stock_tickers(self, obj):
         """
@@ -64,24 +61,24 @@ class NewsSitemap(Sitemap):
         and must match its entry in Google Finance.
         For example, "NASDAQ:AMAT" (but not "NASD:AMAT"), or "BOM:500325" (but not "BOM:RIL").
         """
-        return None
         
     
     def get_urls(self, page=1):
         from django.contrib.sites.models import Site
-        current_site = Site.objects.get_current()
+        domain = Site.objects.get_current().domain
+        get = self._Sitemap__get
+
         for item in self.paginator.page(page).object_list:
-            loc = "http://%s%s" % (current_site.domain, self._Sitemap__get('location', item))
             yield {
-                'location':   loc,
-                'lastmod':    self._Sitemap__get('lastmod', item, None),
-                'changefreq': self._Sitemap__get('changefreq', item, None),
-                'priority':   self._Sitemap__get('priority', item, None),
+                'location':     "http://%s%s" % (domain, get('location', item)),
+                'lastmod':      get('lastmod', item, None),
+                'changefreq':   get('changefreq', item, None),
+                'priority':     get('priority', item, None),
                 
                 # News attrs
-                'title':        self._Sitemap__get('title', item, None),
-                'access':       self._Sitemap__get('access', item, None),
-                'keywords':     self._Sitemap__get('keywords', item, None),
-                'genres':       self._Sitemap__get('genres', item, None),
-                'stock_tickers':self._Sitemap__get('stock_tickers', item, None),
+                'title':        get('title', item, None),
+                'access':       get('access', item, None),
+                'keywords':     get('keywords', item, None),
+                'genres':       get('genres', item, None),
+                'stock_tickers':get('stock_tickers', item, None),
             }

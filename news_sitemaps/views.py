@@ -1,11 +1,29 @@
 from django.http import HttpResponse, Http404
-from django.template import loader
+from django.shortcuts import render_to_response
 from django.contrib.sites.models import Site
 from django.core import urlresolvers
+from django.template import loader
 from django.utils.encoding import smart_str
 from django.core.paginator import EmptyPage, PageNotAnInteger
 
 from settings import LANG, NAME, TZ
+
+def index(request, sitemaps):
+    current_site = Site.objects.get_current()
+    sites = []
+    protocol = request.is_secure() and 'https' or 'http'
+    for section, site in sitemaps.items():
+        if callable(site):
+            pages = site().paginator.num_pages
+        else:
+            pages = site.paginator.num_pages
+        sitemap_url = urlresolvers.reverse('news_sitemaps.views.news_sitemap', kwargs={'section': section})
+        sites.append('%s://%s%s' % (protocol, current_site.domain, sitemap_url))
+        if pages > 1:
+            for page in range(2, pages+1):
+                sites.append('%s://%s%s?p=%s' % (protocol, current_site.domain, sitemap_url, page))
+    xml = loader.render_to_string('sitemap_index.xml', {'sitemaps': sites})
+    return HttpResponse(xml, mimetype='application/xml')
 
 def news_sitemap(request, sitemaps, section=None):
     maps, urls = [], []
@@ -26,10 +44,10 @@ def news_sitemap(request, sitemaps, section=None):
             raise Http404("Page %s empty" % page)
         except PageNotAnInteger:
             raise Http404("No page '%s'" % page)
-    xml = smart_str(loader.render_to_string('sitemaps/news_sitemap.xml', {
+            
+    return render_to_response('sitemaps/news_sitemap.xml', {
         'urlset': urls,
         'publication_name': NAME,
         'publication_lang': LANG,
-        'publication_tz': TZ,
-    }))
-    return HttpResponse(xml, mimetype='application/xml')
+        'publication_tz': TZ
+    }, mimetype='application/xml')
