@@ -1,12 +1,13 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name = 'news_sitemaps',
-    version="0.1",
+    version="0.1.1",
     description = 'Generates sitemaps compatible with the Google News schema',
     author = 'TWT Web Devs',
     author_email = 'webdev@washingtontimes.com',
     url = 'http://opensource.washingtontimes.com/projects/django-news-sitemaps/',
+    include_package_data = True,
     packages = ['news_sitemaps'],
     classifiers = [
         'Development Status :: 4 - Beta',
