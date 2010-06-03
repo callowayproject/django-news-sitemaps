@@ -19,7 +19,6 @@ if 'stories' in settings.INSTALLED_APPS:
     
 if 'django.contrib.flatpages' in settings.INSTALLED_APPS:
     from django.contrib.flatpages.models import FlatPage
-    from django.contrib.sites.models import Site
     
     class FlatPageSitemap(NewsSitemap):
         limit = 5000
@@ -27,6 +26,19 @@ if 'django.contrib.flatpages' in settings.INSTALLED_APPS:
             return FlatPage.objects.all()
             
     sitemaps['flatpages'] = FlatPageSitemap
+
+if 'django.contrib.flatpages' in settings.INSTALLED_APPS:
+    from django.contrib.comments.models import Comment
+    
+    class CommentSitemap(NewsSitemap):
+        limit = 5000
+        def items(self):
+            return Comment.objects.filter(is_public=True,is_removed=False)
+            
+        def lastmod(self, obj):
+            return obj.submit_date
+            
+    sitemaps['comments'] = CommentSitemap
 
 urlpatterns = patterns('news_sitemaps.views',
     (r'^index\.xml$', 'index', {'sitemaps': sitemaps}),
