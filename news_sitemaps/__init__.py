@@ -69,9 +69,13 @@ class NewsSitemap(Sitemap):
         get = self._Sitemap__get
 
         for item in self.paginator.page(page).object_list:
+            lastmod = get('lastmod', item, None)
+            if not lastmod is None:
+                lastmod = lastmod.replace(microsecond=0)
+
             yield {
                 'location':     "http://%s%s" % (domain, get('location', item)),
-                'lastmod':      get('lastmod', item, None),
+                'lastmod':      lastmod,
                 'changefreq':   get('changefreq', item, None),
                 'priority':     get('priority', item, None),
                 
