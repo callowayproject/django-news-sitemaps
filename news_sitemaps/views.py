@@ -9,6 +9,9 @@ from django.core.paginator import EmptyPage, PageNotAnInteger
 from settings import LANG, NAME, TZ
 
 def index(request, sitemaps):
+    """
+    View to create a sitemap index listing other sitemaps
+    """
     current_site = Site.objects.get_current()
     sites = []
     protocol = request.is_secure() and 'https' or 'http'
@@ -22,18 +25,22 @@ def index(request, sitemaps):
         if pages > 1:
             for page in range(2, pages+1):
                 sites.append('%s://%s%s?p=%s' % (protocol, current_site.domain, sitemap_url, page))
-    xml = loader.render_to_string('sitemap_index.xml', {'sitemaps': sites})
+    xml = loader.render_to_string('sitemaps/index.xml', {'sitemaps': sites})
     return HttpResponse(xml, mimetype='application/xml')
 
 def news_sitemap(request, sitemaps, section=None):
+    """
+    A view for creating Google News Sitemaps
+    Optional section will filter down to just the passed section name
+    """
     maps, urls = [], []
     if section is not None:
         if section not in sitemaps:
-            raise Http404("No sitemap available for section: %r" % section)
+            raise Http404('No sitemap available for section: %r' % section)
         maps.append(sitemaps[section])
     else:
         maps = sitemaps.values()
-    page = request.GET.get("p", 1)
+    page = request.GET.get('p', 1)
     for site in maps:
         try:
             if callable(site):
@@ -41,9 +48,9 @@ def news_sitemap(request, sitemaps, section=None):
             else:
                 urls.extend(site.get_urls(page))
         except EmptyPage:
-            raise Http404("Page %s empty" % page)
+            raise Http404('Page %s empty' % page)
         except PageNotAnInteger:
-            raise Http404("No page '%s'" % page)
+            raise Http404('No page "%s"' % page)
             
     return render_to_response('sitemaps/news_sitemap.xml', {
         'urlset': urls,
