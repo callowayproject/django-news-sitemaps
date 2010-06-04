@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = 'django-news-sitemaps',
-    version="0.1.2",
+    version="0.1.3",
     description = 'Generates sitemaps compatible with the Google News schema',
     author = 'TWT Web Devs',
     author_email = 'webdev@washingtontimes.com',
