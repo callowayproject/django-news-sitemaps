@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.sitemaps import Sitemap
 
 class NewsSitemap(Sitemap):
@@ -61,7 +62,6 @@ class NewsSitemap(Sitemap):
         and must match its entry in Google Finance.
         For example, "NASDAQ:AMAT" (but not "NASD:AMAT"), or "BOM:500325" (but not "BOM:RIL").
         """
-        
     
     def get_urls(self, page=1):
         from django.contrib.sites.models import Site
@@ -70,7 +70,7 @@ class NewsSitemap(Sitemap):
 
         for item in self.paginator.page(page).object_list:
             lastmod = get('lastmod', item, None)
-            if not lastmod is None:
+            if isinstance(lastmod, datetime.time) or isinstance(lastmod, datetime.datetime):
                 lastmod = lastmod.replace(microsecond=0)
 
             yield {
