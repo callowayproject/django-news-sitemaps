@@ -95,3 +95,9 @@ INSTALLED_APPS = (
 )
 
 PUBLICATION_NAME = 'Example Times'
+
+try:
+    import django_coverage
+    TEST_RUNNER = 'django_coverage.coverage_runner.run_tests'
+except ImportError:
+    pass
