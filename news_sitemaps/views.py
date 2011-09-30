@@ -20,7 +20,7 @@ def index(request, sitemaps):
             pages = site().paginator.num_pages
         else:
             pages = site.paginator.num_pages
-        sitemap_url = urlresolvers.reverse('news_sitemaps.views.news_sitemap', kwargs={'section': section})
+        sitemap_url = urlresolvers.reverse('news_sitemaps_sitemap', kwargs={'section': section})
         sites.append('%s://%s%s' % (protocol, current_site.domain, sitemap_url))
         if pages > 1:
             for page in range(2, pages+1):
@@ -51,7 +51,7 @@ def news_sitemap(request, sitemaps, section=None):
             raise Http404('Page %s empty' % page)
         except PageNotAnInteger:
             raise Http404('No page "%s"' % page)
-            
+
     return render_to_response('sitemaps/news_sitemap.xml', {
         'urlset': urls,
         'publication_name': NAME,
