@@ -6,7 +6,7 @@ from django.template import loader
 from django.utils.encoding import smart_str
 from django.core.paginator import EmptyPage, PageNotAnInteger
 
-from settings import LANG, NAME, TZ
+from .settings import LANG, NAME, TZ
 
 def index(request, sitemaps):
     """
@@ -26,7 +26,7 @@ def index(request, sitemaps):
             for page in range(2, pages+1):
                 sites.append('%s://%s%s?p=%s' % (protocol, current_site.domain, sitemap_url, page))
     xml = loader.render_to_string('sitemaps/index.xml', {'sitemaps': sites})
-    return HttpResponse(xml, mimetype='application/xml')
+    return HttpResponse(xml, content_type='application/xml')
 
 def news_sitemap(request, sitemaps, section=None):
     """
@@ -57,4 +57,4 @@ def news_sitemap(request, sitemaps, section=None):
         'publication_name': NAME,
         'publication_lang': LANG,
         'publication_tz': TZ
-    }, mimetype='application/xml')
+    }, content_type='application/xml')
