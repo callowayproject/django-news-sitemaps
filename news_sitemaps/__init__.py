@@ -19,11 +19,14 @@ def get_version(short=False):
 __version__ = get_version()
 
 
-from sitemaps import NewsSitemap  # NOQA
-
 registry = {}
 
 
 def register(**kwargs):
     for name, sitemap in kwargs.items():
         registry[name] = sitemap
+
+try:
+    from sitemaps import NewsSitemap  # NOQA
+except:
+    pass
