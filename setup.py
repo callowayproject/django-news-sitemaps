@@ -20,7 +20,7 @@ setup(
     author_email='webdev@callowayproject.com',
     url='http://github.com/callowayproject/django-news-sitemaps/',
     include_package_data=True,
-    packages=find_packages(),
+    packages=find_packages(exclude=['example']),
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
