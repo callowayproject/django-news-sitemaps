@@ -9,6 +9,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger
 
 from settings import LANG, NAME, TZ
 
+
 def index(request, sitemaps):
     """
     View to create a sitemap index listing other sitemaps
@@ -29,6 +30,7 @@ def index(request, sitemaps):
     xml = loader.render_to_string('sitemaps/index.xml', {'sitemaps': sites})
     return HttpResponse(xml, content_type='application/xml')
 
+
 def news_sitemap(request, sitemaps, section=None):
     """
     A view for creating Google News Sitemaps
@@ -41,13 +43,16 @@ def news_sitemap(request, sitemaps, section=None):
         maps.append(sitemaps[section])
     else:
         maps = sitemaps.values()
+
     page = request.GET.get('p', 1)
+    protocol = request.is_secure() and 'https' or 'http'
+
     for site in maps:
         try:
             if callable(site):
-                urls.extend(site().get_urls(page))
+                urls.extend(site().get_urls(page, protocol=protocol))
             else:
-                urls.extend(site.get_urls(page))
+                urls.extend(site.get_urls(page, protocol=protocol))
         except EmptyPage:
             raise Http404('Page %s empty' % page)
         except PageNotAnInteger:
