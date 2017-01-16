@@ -5,18 +5,18 @@
 		{% for url in urlset %}
 			<url>
 			<loc>{{ url.location|escape }}</loc>
-			<n:news>
-				<n:publication>
-					<n:name>{{ publication_name }}</n:name>
-					<n:language>{{ publication_lang }}</n:language>
-				</n:publication>
-				<n:title>{{ url.title }}</n:title>
-				{% if url.lastmod %}<n:publication_date>{{ url.lastmod.isoformat }}{{ publication_tz }}</n:publication_date>{% endif %}
-				{% if url.access %}<n:access>{{ url.access|lower }}</n:access> {% endif %}
-				{% if url.genres %}<n:genres>{{ url.genres }}</n:genres>{% endif %}
-				{% if url.keywords %}<n:keywords>{{ url.keywords|escape }}</n:keywords>{% endif %}
-				{% if url.stock_tickers %}<n:stock_tickers>{{ url.stock_tickers }}</n:stock_tickers>{% endif %}
-			</n:news>
+			<news:news>
+				<news:publication>
+					<news:name>{{ publication_name }}</news:name>
+					<news:language>{{ publication_lang }}</news:language>
+				</news:publication>
+				<news:title>{{ url.title }}</news:title>
+				{% if url.lastmod %}<news:publication_date>{{ url.lastmod.isoformat }}{{ publication_tz }}</news:publication_date>{% endif %}
+				{% if url.access %}<news:access>{{ url.access|lower }}</news:access> {% endif %}
+				{% if url.genres %}<news:genres>{{ url.genres }}</news:genres>{% endif %}
+				{% if url.keywords %}<news:keywords>{{ url.keywords|escape }}</news:keywords>{% endif %}
+				{% if url.stock_tickers %}<news:stock_tickers>{{ url.stock_tickers }}</news:stock_tickers>{% endif %}
+			</news:news>
 			</url>
 		{% endfor %}
 	{% endspaceless %}
