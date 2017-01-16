@@ -12,7 +12,7 @@ def index(request, sitemaps):
     """
     View to create a sitemap index listing other sitemaps
     """
-    current_site = Site.objects.get_current()
+    current_site = Site.objects.get_current(request)
     sites = []
     protocol = request.is_secure() and 'https' or 'http'
     for section, site in sitemaps.items():
